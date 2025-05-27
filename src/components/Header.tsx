@@ -1,22 +1,47 @@
-import React, { FC } from 'react';
-import SearchBar from './SearchBar';
-import Link from 'next/link';
+'use client'
 
-const Header: FC = () => (
-  <header className="flex items-center justify-between bg-gray-900 p-4 w-full">
-    <h1 className="text-white font-bold text-xl">Escola XPTO</h1>
-    <SearchBar />
-    <Link 
-      className="bg-blue-600 text-white px-4 py-2 rounded"
-      href={"/login"}>
-        Login
-    </Link>
-       <Link 
-      className="bg-emerald-600 text-white px-4 py-2 rounded ml-3"
-      href={"/register"}>
-        Register
-    </Link>
-  </header>
-);
+import Link from 'next/link';
+import React, { useEffect, useState } from 'react';
+import SearchBar from './SearchBar';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+
+const Header: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    Cookies.remove('token');
+    setIsLoggedIn(false);
+    router.push('/');
+  };
+
+  return (
+    <header className="flex items-center justify-between bg-gray-900 p-4 w-full">
+      <h1 className="text-white font-bold text-xl">Escola XPTO</h1>
+      <SearchBar />
+      {isLoggedIn ? (
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
+      ) : (
+        <Link 
+          className="bg-blue-600 text-white px-4 py-2 rounded"
+          href="/login"
+        >
+          Login
+        </Link>
+      )}
+    </header>
+  );
+};
 
 export default Header;

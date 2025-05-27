@@ -32,12 +32,16 @@ export default async function CardList() {
 
   return (
     <div className="w-full max-w-4xl">
-      {Array.isArray(posts) ? posts.map((post, index) => (
-        <Card 
-          key={index}
-          {...post}
-        />
-      )) : <p>Nenhum post encontrado</p>}
+      {Array.isArray(posts) && posts.length > 0 ? (
+        posts.map((post, index) => (
+          <Card 
+            key={post._id || index}
+            {...post}
+          />
+        ))
+      ) : (
+        <p className="text-center text-gray-500">Nenhum post encontrado</p>
+      )}
     </div>
   );
 }
