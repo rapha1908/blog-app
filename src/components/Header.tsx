@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 const Header: React.FC<{ search: string, setSearch: (value: string) => void }> = ({ search, setSearch }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+ 
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -19,6 +20,7 @@ const Header: React.FC<{ search: string, setSearch: (value: string) => void }> =
     Cookies.remove('token');
     setIsLoggedIn(false);
     router.push('/');
+    window.location.reload();
   };
 
   return (
