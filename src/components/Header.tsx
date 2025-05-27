@@ -33,12 +33,20 @@ const Header: React.FC<{ search: string, setSearch: (value: string) => void }> =
           Logout
         </button>
       ) : (
-        <Link 
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-          href="/login"
-        >
-          Login
-        </Link>
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+          <Link 
+            className="bg-blue-600 text-white px-4 py-2 rounded w-full sm:w-auto text-center"
+            href="/login"
+          >
+            Login
+          </Link>
+          <Link 
+            className="bg-blue-600 text-white px-4 py-2 rounded w-full sm:w-auto text-center"
+            href="/register"
+          >
+            Registrar
+          </Link>
+        </div>
       )}
     </header>
   );
