@@ -2,6 +2,9 @@ import React, { FC } from 'react';
 import Card from './Card';
 import { Post } from '../types';
 
+
+
+
 interface CardListProps {
   items: Post[];
 }

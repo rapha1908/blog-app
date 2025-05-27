@@ -1,31 +1,34 @@
 import CardList from "@/components/CardList";
 import Header from "@/components/Header";
 import { Post } from "@/types";
+import { cookies } from 'next/headers';
 
-export default function Home() {
+async function getPosts() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
 
-  const posts: Post[] = [
-    {
-      title: 'Palestra de Next.js',
-      author: 'Autor X',
-      description: 'Lorem ipsum dolor sit amet...'
-    },
-    {
-      title: 'Testando Node.js com Vitest – Hands-On',
-      author: 'Autor Y',
-      description: 'Lorem ipsum dolor sit amet...'
-    },
-    {
-      title: 'Testando Node.js com Vitest – Hands-On',
-      author: 'Autor Y',
-      description: 'Lorem ipsum dolor sit amet...'
-    },   {
-      title: 'Testando Node.js com Vitest – Hands-On',
-      author: 'Autor Y',
-      description: 'Lorem ipsum dolor sit amet...'
-    },
-    // ...
-  ];
+  try {
+    const response = await fetch('http://localhost:5000/posts', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error('Erro ao buscar posts:', response.statusText);
+      return [];
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    return [];
+  }
+}
+
+export default async function Home() {
+  const posts: Post[] = await getPosts();
 
   return (
     <main className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
