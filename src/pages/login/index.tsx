@@ -34,7 +34,11 @@ export default function Login() {
         });
         throw new Error(data.message || 'Erro ao fazer login');
       }
+      
+      // Armazenar token e tipo de usuário nos cookies
       document.cookie = `token=${data.token}; path=/; max-age=3600`; // Set token in cookie
+      document.cookie = `userType=${data.usuario.tipo}; path=/; max-age=3600`; // Set user type in cookie
+      
       toast.success('Login realizado com sucesso!', {
         position: 'bottom-center',
         autoClose: 3000,
@@ -46,8 +50,10 @@ export default function Login() {
         theme: 'colored',
         transition: Bounce,
       });
+      
+      // Armazenar email no cookie (se ainda necessário)
       document.cookie = `email=${JSON.stringify(email)}; path=/; max-age=3600`;
-            
+      
       router.push('/');
     } catch (error) {
       console.error(error);

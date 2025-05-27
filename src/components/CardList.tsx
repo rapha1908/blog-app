@@ -4,7 +4,7 @@ import Card from './Card';
 import { cookies } from 'next/headers';
 
 async function getPosts() {
-  const cookieStore = await cookies(); // Torne isso assíncrono
+  const cookieStore = await cookies();
   const token = cookieStore.get('token')?.value;
 
   try {
@@ -29,17 +29,13 @@ async function getPosts() {
 
 export default async function CardList() {
   const posts: Post[] = await getPosts();
-  console.log('Posts recebidos:', posts);
 
   return (
     <div className="w-full max-w-4xl">
       {Array.isArray(posts) ? posts.map((post, index) => (
         <Card 
           key={index}
-          titulo={post.titulo || ''}
-          conteudo={post.conteudo || ''}
-          autor={post.autor.nome || ''} // Passamos apenas o nome do autor
-          materia={post.materia || ''}
+          {...post}
         />
       )) : <p>Nenhum post encontrado</p>}
     </div>
