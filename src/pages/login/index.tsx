@@ -61,38 +61,40 @@ export default function Login() {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center h-screen w-screen flex-1 gap-7">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin} className="flex flex-col items-center justify-center gap-4 w-[80vw]">
-        <input 
-          className="w-[40%] h-13 border border-[#5865F2] p-4 rounded-4xl" 
-          type="text" 
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input 
-          className="w-[40%] h-13 border border-[#5865F2] p-4 rounded-4xl" 
-          type="password" 
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        <div className="flex items-center justify-between mt-2 w-[40%] max-h-12 gap-3">
-          <Link 
-            className="border border-[#5865F2] p-2 rounded-4xl w-50 text-center" 
-            href="/">
-            Voltar
-          </Link>
-          <button 
-            className="bg-[#5865F2] p-2 rounded-4xl w-50 disabled:opacity-40" 
-            type="submit"
-            disabled={!email || !senha}
-          >
-            Login
-          </button>
-        </div> 
-      </form>
+    <main className="flex flex-col items-center justify-center min-h-screen w-full p-4 bg-gray-900 text-white">
+      <div className="w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <form onSubmit={handleLogin} className="flex flex-col gap-4">
+          <input 
+            className="w-full h-13 border border-[#5865F2] p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400" 
+            type="text" 
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input 
+            className="w-full h-13 border border-[#5865F2] p-3 rounded-lg bg-gray-800 text-white placeholder-gray-400" 
+            type="password" 
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          <div className="flex flex-col sm:flex-row items-center justify-between mt-4 gap-4">
+            <Link 
+              className="w-full sm:w-auto flex-1 border border-[#5865F2] p-3 rounded-lg text-center hover:bg-[#5865F2] transition-colors" 
+              href="/">
+              Voltar
+            </Link>
+            <button 
+              className="w-full sm:w-auto flex-1 bg-[#5865F2] p-3 rounded-lg disabled:opacity-40 hover:bg-[#4752C4] transition-colors" 
+              type="submit"
+              disabled={!email || !senha}
+            >
+              Login
+            </button>
+          </div> 
+        </form>
+      </div>
       <ToastContainer
         position="bottom-center"
         autoClose={5000}
@@ -103,7 +105,7 @@ export default function Login() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="colored"
+        theme="dark"
         transition={Bounce}
       />
     </main>
