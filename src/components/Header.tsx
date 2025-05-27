@@ -6,7 +6,7 @@ import SearchBar from './SearchBar';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-const Header: React.FC = () => {
+const Header: React.FC<{ search: string, setSearch: (value: string) => void }> = ({ search, setSearch }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
 
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
   return (
     <header className="flex items-center justify-between bg-gray-900 p-4 w-full">
       <h1 className="text-white font-bold text-xl">Escola XPTO</h1>
-      <SearchBar />
+      <SearchBar value={search} onChange={e => setSearch(e.target.value)} />
       {isLoggedIn ? (
         <button
           onClick={handleLogout}

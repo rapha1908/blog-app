@@ -1,47 +1,53 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import { Post } from '@/types';
 import Card from './Card';
-import { cookies } from 'next/headers';
 
-async function getPosts() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get('token')?.value;
-
-  try {
-    const response = await fetch('http://localhost:5000/posts', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    });
-    if (response.ok) {
-      return await response.json();
-    } else {
-      console.error('Erro ao buscar posts:', response.statusText);
-      return [];
-    }
-  } catch (error) {
-    console.error('Erro ao buscar dados:', error);
-    return [];
-  }
+interface CardListProps {
+  search: string;
 }
 
-export default async function CardList() {
-  const posts: Post[] = await getPosts();
+const CardList: React.FC<CardListProps> = ({ search }) => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const token = document.cookie
+          .split('; ')
+          .find(row => row.startsWith('token='))
+          ?.split('=')[1];
+
+        const response = await fetch('http://localhost:5000/posts', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setPosts(data);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar posts:', error);
+      }
+    }
+    fetchPosts();
+  }, []);
+
+  const filteredPosts = posts.filter(post =>
+    (post.titulo?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
+    (post.autor?.nome?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
+    (post.materia?.toLowerCase().includes(search.toLowerCase()) ?? false)
+  );
 
   return (
-    <div className="w-full max-w-4xl">
-      {Array.isArray(posts) && posts.length > 0 ? (
-        posts.map((post, index) => (
-          <Card 
-            key={post._id || index}
-            {...post}
-          />
-        ))
-      ) : (
-        <p className="text-center text-gray-500">Nenhum post encontrado</p>
-      )}
+    <div>
+      {filteredPosts.map(post => (
+        <Card key={post._id} post={post} />
+      ))}
     </div>
   );
-}
+};
+
+export default CardList;
