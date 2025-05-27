@@ -1,6 +1,6 @@
-// types/index.ts
 export interface Post {
-  title: string;
-  author: string;
-  description: string;
+  titulo: string;
+  conteudo: string;
+  autor: string;
+  materia: string;
 }

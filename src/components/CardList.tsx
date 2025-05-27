@@ -1,26 +1,47 @@
-import React, { FC } from 'react';
+import React from 'react';
+import { Post } from '@/types';
 import Card from './Card';
-import { Post } from '../types';
+import { cookies } from 'next/headers';
 
+async function getPosts() {
+  const cookieStore = await cookies(); // Torne isso assíncrono
+  const token = cookieStore.get('token')?.value;
 
-
-
-interface CardListProps {
-  items: Post[];
+  try {
+    const response = await fetch('http://localhost:5000/posts', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error('Erro ao buscar posts:', response.statusText);
+      return [];
+    }
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    return [];
+  }
 }
 
-const CardList: FC<CardListProps> = ({ items }) => (
-  <main className="p-6">
-    {items.map((item, i) => (
-      <Card
-        key={i}
-        title={item.title}
-        author={item.author}
-        description={item.description}
-        isAuthenticated={true}
-      />
-    ))}
-  </main>
-);
+export default async function CardList() {
+  const posts: Post[] = await getPosts();
+  console.log('Posts recebidos:', posts);
 
-export default CardList;
+  return (
+    <div className="w-full max-w-4xl">
+      {Array.isArray(posts) ? posts.map((post, index) => (
+        <Card 
+          key={index}
+          titulo={post.titulo || ''}
+          conteudo={post.conteudo || ''}
+          autor={post.autor.nome || ''} // Passamos apenas o nome do autor
+          materia={post.materia || ''}
+        />
+      )) : <p>Nenhum post encontrado</p>}
+    </div>
+  );
+}
