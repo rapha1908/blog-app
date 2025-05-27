@@ -44,12 +44,12 @@ const PostDetailPage = () => {
 
   return (
     <main className="p-4 bg-gray-800 m-7 rounded shadow-lg text-white">
-      <h1>{post.titulo}</h1>
-      <p><strong>Autor:</strong> {post.autor ? post.autor.nome : 'Desconhecido'}</p>
-      <p><strong>Matéria:</strong> {post.materia}</p>
+      <h1 className="text-2xl font-bold mb-4">{post.titulo}</h1>
+      <p className="mb-2"><strong>Autor:</strong> {post.autor ? post.autor.nome : 'Desconhecido'}</p>
+      <p className="mb-4"><strong>Matéria:</strong> {post.materia}</p>
       <div>
         <strong>Conteúdo:</strong>
-        <p>{post.conteudo}</p>
+        <p className="mt-2 whitespace-pre-wrap">{post.conteudo}</p>
       </div>
       <div className='flex items-center justify-between mt-4'>
           <Link 
@@ -58,8 +58,6 @@ const PostDetailPage = () => {
             Voltar
           </Link>
       </div>
-      
-
     </main>
   );
 };
