@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface Usuario {
   _id: string;
@@ -60,41 +61,51 @@ export default function AdministradoresPage() {
   if (loading) return <div>Carregando...</div>;
 
   return (
-    <main className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Professores e Usuários</h1>
-      <table className="w-full bg-gray-800 rounded">
-        <thead>
-          <tr className="text-left text-white">
-            <th className="p-2">Nome</th>
-            <th className="p-2">Email</th>
-            <th className="p-2">Tipo</th>
-            <th className="p-2">Ações</th>
+    <main className="p-4 sm:p-6 max-w-3xl mx-auto">
+  <h1 className="text-2xl font-bold mb-6">Professores e Usuários</h1>
+  <div className="overflow-x-auto rounded">
+    <table className="w-full bg-gray-800 rounded min-w-[600px]">
+      <thead>
+        <tr className="text-left text-white text-xs sm:text-base">
+          <th className="p-2">Nome</th>
+          <th className="p-2">Email</th>
+          <th className="p-2">Tipo</th>
+          <th className="p-2">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {usuarios.map((usuario) => (
+          <tr key={usuario._id} className="border-t border-gray-700 text-white text-xs sm:text-base">
+            <td className="p-2">{usuario.nome}</td>
+            <td className="p-2">{usuario.email}</td>
+            <td className="p-2">{usuario.tipo}</td>
+            <td className="p-2 flex flex-col sm:flex-row gap-2">
+              <button
+                className="bg-yellow-500 px-3 py-1 rounded text-black"
+                onClick={() => router.push(`/usuario/${usuario._id}`)}
+              >
+                Editar
+              </button>
+              <button
+                className="bg-red-600 px-3 py-1 rounded text-white"
+                onClick={() => handleDelete(usuario._id)}
+              >
+                Excluir
+              </button>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {usuarios.map((usuario) => (
-            <tr key={usuario._id} className="border-t border-gray-700 text-white">
-              <td className="p-2">{usuario.nome}</td>
-              <td className="p-2">{usuario.email}</td>
-              <td className="p-2">{usuario.tipo}</td>
-              <td className="p-2 flex gap-2">
-                <button
-                  className="bg-yellow-500 px-3 py-1 rounded text-black"
-                  onClick={() => router.push(`/professores/editar/${usuario._id}`)}
-                >
-                  Editar
-                </button>
-                <button
-                  className="bg-red-600 px-3 py-1 rounded text-white"
-                  onClick={() => handleDelete(usuario._id)}
-                >
-                  Excluir
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </main>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <div className="flex justify-end mt-6">
+    <Link
+      className="w-full sm:w-auto border border-[#5865F2] p-3 rounded-lg text-center hover:bg-[#5865F2] transition-colors"
+      href="/"
+    >
+      Voltar
+    </Link>
+  </div>
+</main>
   );
 }
