@@ -40,14 +40,11 @@ const CardList: React.FC<CardListProps> = ({ search }) => {
     (post.autor?.nome?.toLowerCase().includes(search.toLowerCase()) ?? false) ||
     (post.materia?.toLowerCase().includes(search.toLowerCase()) ?? false)
   );
-  const handleDeletePost = (deletedPostId: string) => {
-  setPosts(prevPosts => prevPosts.filter(post => post._id !== deletedPostId));
-};
 
   return (
     <div>
       {filteredPosts.map(post => (
-        <Card key={post._id} post={post} onDeletePost={handleDeletePost} />
+        <Card key={post._id} post={post} />
       ))}
     </div>
   );
