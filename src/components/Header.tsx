@@ -1,24 +1,20 @@
 'use client'
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import SearchBar from './SearchBar';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { useUserType } from '@/hooks/useUserType';
 
 const Header: React.FC<{ search: string, setSearch: (value: string) => void }> = ({ search, setSearch }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
- 
-
-  useEffect(() => {
-    const token = Cookies.get('token');
-    setIsLoggedIn(!!token);
-  }, []);
+  const userType = useUserType();
+  const isLoggedIn = !!Cookies.get('token');
 
   const handleLogout = () => {
     Cookies.remove('token');
-    setIsLoggedIn(false);
+    Cookies.remove('userType');
     router.push('/');
     window.location.reload();
   };
@@ -28,12 +24,22 @@ const Header: React.FC<{ search: string, setSearch: (value: string) => void }> =
       <h1 className="text-white font-bold text-xl">Escola XPTO</h1>
       <SearchBar value={search} onChange={e => setSearch(e.target.value)} />
       {isLoggedIn ? (
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white px-4 py-2 rounded"
-        >
-          Logout
-        </button>
+        <>
+          {userType === "Administrador" && (
+            <Link
+              className="bg-green-600 text-white px-4 py-2 rounded mr-2"
+              href="/administradores"
+            >
+              Professores
+            </Link>
+          )}
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 text-white px-4 py-2 rounded"
+          >
+            Logout
+          </button>
+        </>
       ) : (
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
           <Link 
